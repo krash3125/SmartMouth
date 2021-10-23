@@ -36,12 +36,22 @@ socket.on('letterChange', (data) => {
     document.getElementById("secondLetter").innerHTML = data[1]
 })
 
+socket.on('updateStartBtn', ()=>{
+    document.getElementById('start').disabled = !document.getElementById('start').disabled
+})
+
 function genLetters() {
     socket.emit('genLetters')
 }
 
+function startGame() {
+    socket.emit('startGame')
+    document.getElementById('start').disabled = true
+}
+
 function submitGuess(word){
     //word = word//.replace(/^[A-Za-z]+$/, "") //get better regex thing
+    word = word.toLowerCase()
     if(word.length>2){
         if(word.charAt(0)==document.getElementById("firstLetter").innerHTML){
             if(word.charAt(word.length-1)==document.getElementById("secondLetter").innerHTML){
@@ -55,6 +65,8 @@ function submitGuess(word){
 window.onload = () => {
     document.getElementById("generate").addEventListener('click', () => genLetters())
     document.getElementById("leave").addEventListener('click', () => window.location.href = "/home")
+    document.getElementById("start").addEventListener('click', () => startGame())
+
 
     let guessBox = document.getElementById('guessBox')
 
