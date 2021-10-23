@@ -21,7 +21,7 @@ router.get('/home', (req, res) => {
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
 const checkWord = require('check-word')
 const words = checkWord('en')
-const gameStarted = false
+let gameStarted = false
 
 io.on('connection', (socket) => {
   socket.on('userJoined', (name)=>{
@@ -41,10 +41,20 @@ io.on('connection', (socket) => {
     })
     })
 
+  socket.on('startGame', ()=>{
+    gameStarted = true
+    let alphabet = "abcdefghijklmnopqrstuvwxyz"
+    let letters = [alphabet[Math.floor(Math.random() * alphabet.length)], alphabet[Math.floor(Math.random() * alphabet.length)]]
+    io.emit('letterChange', letters)
+    socket.broadcast.emit('updateStartBtn')
+  })
+
   socket.on('submitGuess', (word) => {
-    if(words.check(word)){
+    if(gameStarted && words.check(word)){
       userSocketIdMap.get(socket.id)[1] += 100
       io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+      gameStarted = false
+      io.emit('updateStartBtn')
       //console.log(true)
     }
   })

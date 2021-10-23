@@ -18,52 +18,10 @@ body {
 
     margin: 1rem;
     padding: 1rem;
-    border-style: solid;
-    border-radius: 10px;
 }
 
 .letter {
-    /* color: rgb(255, 251, 251);
-    font-size: 3rem;
-    margin: 1rem;
-    padding: 1.5rem; */
     background-color: var(--tileColor);
-    /* border-style: solid;
-    border-radius: 10px;
-
-    text-align: center;
-    min-width: 2.5rem; */
-
-}
-
-.guessBox {
-    background-color: white;
-
-    margin: 1rem;
-    height: 1.25rem;
-    width: 10rem;
-
-    
-
-    border-style: solid;
-    border-radius: 5px;
-
-}
-
-.gameDiv {
-    border-style: solid;
- 
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-h4 {
-    border-style: solid;
-    border: 5px;
-    border-color: black;
-    margin: 3px;
 }
 
 .playerTable {
@@ -71,3 +29,13 @@ h4 {
     border-color: black;
     border: 5px;
 }
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }
