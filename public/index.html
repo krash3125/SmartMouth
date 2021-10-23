@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Socket.IO Javacript -->
+    <title>Smart Mouth</title>
+    <link rel="stylesheet" href="/css/game.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/app.js" charset="utf-8"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
-    <button id="start">Start</button>
-    <button id="home">Home</button>
-    <button id="crazy">Crazy</button>
+    <div class="center">
+        <div class="letterDisplay">
+            <a id="firstLetter" class="letter">h</a>
+            <a id="secondLetter" class="letter">2</a>
+        </div>
+        <div id='playerList' class="letterDisplay">
+        </div>
+        <input id="guessBox" class="guessBox" placeholder="Guess"/>
+        <button id="generate" >Generate</button>
+        <button id="leave" >Leave</button>
+    </div>
 </body>
 </html>
