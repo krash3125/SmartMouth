@@ -18,15 +18,35 @@ router.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home.html'))
 })
 
+const userSocketIdMap = new Map(); //a map of online usernames and their clients
+const checkWord = require('check-word')
+const words = checkWord('en')
+const gameStarted = false
+
 io.on('connection', (socket) => {
-      
-  socket.on('userJoined', (data)=>{
-    socket.broadcast.emit('message', (data + " has joined the channel"))
-    socket.broadcast.emit('addUserToList', (data))
+  socket.on('userJoined', (name)=>{
+    userSocketIdMap.set(socket.id, [name, 0]);
+    //console.log(userSocketIdMap)
+    
+    // console.log(userSocketIdMap.values())
+    io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+
+    // console.log(userSocketIdMap.keys())
+    // console.log(userSocketIdMap.values())
+
     socket.on('disconnect', () => {
-      socket.broadcast.emit('message', (data + " has left the channel"))
-      socket.broadcast.emit('removeUserFromList', data)
+      userSocketIdMap.delete(socket.id)
+      io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+     // console.log(userSocketIdMap)
     })
+    })
+
+  socket.on('submitGuess', (word) => {
+    if(words.check(word)){
+      userSocketIdMap.get(socket.id)[1] += 100
+      io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+      //console.log(true)
+    }
   })
   
   socket.on('genLetters', () => {

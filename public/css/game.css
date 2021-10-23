@@ -1,34 +1,21 @@
 :root {
-    --backPanelColor: rgb(228, 204, 153);
-    --tileColor: rgb(87, 204, 122);
+    --backPanelColor: #E0CFFC;
+    --tileColor: #A3CFBB;
+    --btnColor: rgb(129, 183, 212);
   }
   
 body {
     background-color: var(--backPanelColor);
-    font-family: system-ui;}
-
-.center{
-    display: flex;
-
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    flex: 1 1 auto;
-    margin: 1rem;
-    padding: 1rem;
-    border-style: solid;
-    border-radius: 10px;
+    font-family: system-ui;
 }
+
 
 .letterDisplay{
     display: flex;
-
-    flex-direction: col;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
 
-    flex: 1 1 auto;
     margin: 1rem;
     padding: 1rem;
     border-style: solid;
@@ -36,16 +23,16 @@ body {
 }
 
 .letter {
-    color: rgb(255, 251, 251);
+    /* color: rgb(255, 251, 251);
     font-size: 3rem;
     margin: 1rem;
-    padding: 1.5rem;
-    background-color: rgb(231, 141, 6);
-    border-style: solid;
+    padding: 1.5rem; */
+    background-color: var(--tileColor);
+    /* border-style: solid;
     border-radius: 10px;
 
     text-align: center;
-    min-width: 2.5rem;
+    min-width: 2.5rem; */
 
 }
 
@@ -77,4 +64,10 @@ h4 {
     border: 5px;
     border-color: black;
     margin: 3px;
+}
+
+.playerTable {
+    border-style: solid;
+    border-color: black;
+    border: 5px;
 }
