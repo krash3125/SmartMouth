@@ -5,33 +5,35 @@ socket.on('message', (data) => {
 })
 
 socket.on('connect', ()=>{
-    socket.emit('userJoined', localStorage.getItem("name"))
+    socket.emit('userJoined', sessionStorage.getItem("name"))
     
 })
 
-socket.on('updatePlayerList', (playerList) => {
+socket.on('updatePlayerList', (playerList, code) => {
     let playerTable = document.getElementById('playerTable')
     playerTable.innerHTML = ""
     //console.log(playerList)
     playerList.forEach(player => {
-        let tr = document.createElement('tr')
-        tr.className = "playerTable"
-        let td1 = document.createElement('td')
-        let td2 = document.createElement('td')
-        // console.log(player[1][0])
-        // console.log(player[1][1])
-        td1.innerHTML = player[1][0]
-        td2.innerHTML = player[1][1]
-        tr.appendChild(td1)
-        tr.appendChild(td2)
-        playerTable.appendChild(tr)
-        //console.log(tr)
+        if(player[1][2]==code){
+            let tr = document.createElement('tr')
+            tr.className = "playerTable"
+            let td1 = document.createElement('td')
+            let td2 = document.createElement('td')
+            // console.log(player[1][0])
+            // console.log(player[1][1])
+            td1.innerHTML = player[1][0]
+            td2.innerHTML = player[1][1]
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            playerTable.appendChild(tr)
+            //console.log(tr)
+        }
     });
 })
 
 
 socket.on('letterChange', (data) => {
-    console.log(data)
+    //console.log(data)
     document.getElementById("firstLetter").innerHTML = data[0]
     document.getElementById("secondLetter").innerHTML = data[1]
 })
@@ -46,7 +48,7 @@ function genLetters() {
 
 function startGame() {
     socket.emit('startGame')
-    document.getElementById('start').disabled = true
+    //document.getElementById('start').disabled = true
 }
 
 function submitGuess(word){

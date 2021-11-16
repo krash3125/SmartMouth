@@ -2,7 +2,7 @@
 
 function join() {
     if(document.getElementById("name").value!=""){
-        localStorage.setItem("name", document.getElementById("name").value);
+        sessionStorage.setItem("name", document.getElementById("name").value);
         window.location.href = "/"
     } 
 }

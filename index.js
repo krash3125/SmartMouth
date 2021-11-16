@@ -8,53 +8,76 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
+let serverCode
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-router.get('/', (req, res) => {
+router.get('/game/:code', (req, res) => {
+  if(req.params){
+    serverCode = (req.params.code)
+  }
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
+
+console.log(serverCode)
 
 router.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home.html'))
 })
 
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
+const serverRooms = new Map(); //a map of room codes
 const checkWord = require('check-word')
 const words = checkWord('en')
 let gameStarted = false
 
 io.on('connection', (socket) => {
   socket.on('userJoined', (name)=>{
-    userSocketIdMap.set(socket.id, [name, 0]);
+
+    userSocketIdMap.set(socket.id, [name, 0, serverCode]);
     //console.log(userSocketIdMap)
-    
+    if(serverCode!=null){
+      if(serverRooms.has(serverCode)){
+        serverRooms.get(serverCode).push(socket.id)
+      }
+      else{
+        serverRooms.set(serverCode, [socket.id])
+      }
+    }
+    console.log(userSocketIdMap.get(socket.id)[2])
+    console.log(serverCode)
+    socket.join(serverCode)
+    //console.log(Array.from(serveyrRooms))
+
     // console.log(userSocketIdMap.values())
-    io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+    io.to(serverCode).emit('updatePlayerList', (Array.from(userSocketIdMap)), serverCode)
 
     // console.log(userSocketIdMap.keys())
     // console.log(userSocketIdMap.values())
 
     socket.on('disconnect', () => {
       userSocketIdMap.delete(socket.id)
-      io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+      io.to(serverCode).emit('updatePlayerList', (Array.from(userSocketIdMap)), serverCode)
      // console.log(userSocketIdMap)
     })
     })
 
   socket.on('startGame', ()=>{
+    //console.log(userSocketIdMap.get(socket.id)[2])
     gameStarted = true
     let alphabet = "abcdefghijklmnopqrstuvwxyz"
     let letters = [alphabet[Math.floor(Math.random() * alphabet.length)], alphabet[Math.floor(Math.random() * alphabet.length)]]
-    io.emit('letterChange', letters)
-    socket.broadcast.emit('updateStartBtn')
+    io.to(userSocketIdMap.get(socket.id)[2]).emit('letterChange', letters)
+    io.to(userSocketIdMap.get(socket.id)[2]).emit('updateStartBtn')
   })
 
   socket.on('submitGuess', (word) => {
     if(gameStarted && words.check(word)){
       userSocketIdMap.get(socket.id)[1] += 100
-      io.emit('updatePlayerList', (Array.from(userSocketIdMap)))
+      io.to(userSocketIdMap.get(socket.id)[2]).emit('updatePlayerList', (Array.from(userSocketIdMap)))
       gameStarted = false
-      io.emit('updateStartBtn')
+      io.to(userSocketIdMap.get(socket.id)[2]).emit('updateStartBtn')
+      console.log(userSocketIdMap)
       //console.log(true)
     }
   })
@@ -62,13 +85,10 @@ io.on('connection', (socket) => {
   socket.on('genLetters', () => {
     let alphabet = "abcdefghijklmnopqrstuvwxyz"
     let letters = [alphabet[Math.floor(Math.random() * alphabet.length)], alphabet[Math.floor(Math.random() * alphabet.length)]]
-    io.emit('letterChange', letters)
+    console.log(serverCode)
+    io.to(userSocketIdMap.get(socket.id)[2]).emit('letterChange', letters)
   })
 })
-
-
-
-
 
 const PORT = process.env.PORT || 3000;
 
