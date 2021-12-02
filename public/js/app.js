@@ -6,10 +6,14 @@ socket.on('message', (data) => {
 
 socket.on('connect', ()=>{
     socket.emit('userJoined', sessionStorage.getItem("name"))
-    
 })
 
+const showCode = (code) => {
+    document.getElementById("codeDisplay").innerHTML = code
+}
+
 socket.on('updatePlayerList', (playerList, code) => {
+    showCode(code)
     let playerTable = document.getElementById('playerTable')
     playerTable.innerHTML = ""
     //console.log(playerList)

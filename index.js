@@ -10,19 +10,19 @@ const io = socketIO(server)
 
 let serverCode
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname)));
 
 router.get('/game/:code', (req, res) => {
   if(req.params){
     serverCode = (req.params.code)
   }
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  res.sendFile(path.join(__dirname, 'docs', 'index.html'))
 })
 
 console.log(serverCode)
 
 router.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'home.html'))
+  res.sendFile(path.join(__dirname, 'docs', 'home.html'))
 })
 
 const userSocketIdMap = new Map(); //a map of online usernames and their clients
@@ -33,7 +33,9 @@ let gameStarted = false
 
 io.on('connection', (socket) => {
   socket.on('userJoined', (name)=>{
-
+    if(serverCode == null) {
+      serverCode = Math.floor(1000 + Math.random() * 9000);
+    }
     userSocketIdMap.set(socket.id, [name, 0, serverCode]);
     //console.log(userSocketIdMap)
     if(serverCode!=null){
