@@ -13,7 +13,6 @@ const showCode = (code) => {
 }
 
 socket.on('updatePlayerList', (playerList, code) => {
-    showCode(code)
     let playerTable = document.getElementById('playerTable')
     playerTable.innerHTML = ""
     //console.log(playerList)
