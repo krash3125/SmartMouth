@@ -17,7 +17,7 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
  
 //page routing
-router.get(['/'], (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'docs', 'home.html'))
 })
 
@@ -26,6 +26,11 @@ router.get('/game/:code', (req, res) => {
     serverCode = (req.params.code)
   }
   res.sendFile(path.join(__dirname, 'docs', 'index.html'))
+})
+
+router.get('*', (req, res) => {
+  //change path to /
+  res.sendFile(path.join(__dirname, 'docs', 'home.html'))
 })
 
 console.log(serverCode)
