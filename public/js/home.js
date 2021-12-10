@@ -6,8 +6,8 @@ const newGame = () => {
 const joinGame = () => {
     //needs to check if room exists
     let code = $("#codeInput").val()
-    if (code.length == 4) {
-        window.location.href = "/game/" + code
+    if (code.length == 4 && /^[A-Z]+$/i.test(code)) {
+        window.location.href = "/game/" + code.toUpperCase()
     }
 }
 
