@@ -1,4 +1,3 @@
-
 const path = require('path')
 const http = require('http')
 const express = require('express')
@@ -33,7 +32,7 @@ router.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'docs', 'home.html'))
 })
 
-console.log(serverCode)
+// console.log(serverCode)
 
 //userclass
 class User {
@@ -69,11 +68,7 @@ io.on('connection', (socket) => {
       serverRooms.set(serverCode, [ newUser ] )
     }
     socketIdMap.set(socket.id, newUser)
-
-    console.log(serverRooms.get(serverCode)[0].name)
     socket.join(serverCode)
-    console.log(serverRooms)
-    console.log(socketIdMap)
 
     io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
   }
@@ -86,15 +81,15 @@ io.on('connection', (socket) => {
 
   socket.on('userJoined', (name) => {
     userInit(name)
+  })
 
-    socket.on('disconnect', () => {
-      serverRooms.set(serverCode, serverRooms.get(serverCode).filter(user => user.socketId != socket.id))
-      socketIdMap.delete(socket.id)
-      console.log(serverRooms)
-      console.log(socketIdMap)
-      //close room if 0 players in game
-      io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
-    })
+  socket.on('disconnect', () => {
+    serverRooms.set(serverCode, serverRooms.get(serverCode).filter(user => user.socketId != socket.id))
+    socketIdMap.delete(socket.id)
+    // console.log(serverRooms)
+    // console.log(socketIdMap)
+    //close room if 0 players in game
+    io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
   })
 
   socket.on('startGame', () => {
@@ -107,7 +102,9 @@ io.on('connection', (socket) => {
       socketIdMap.get(socket.id).addPoints(100)
       io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
       io.to(serverCode).emit('clearInput')
+      io.to(serverCode).emit('lastWord', word)
       newLetters()
+
     }
   })
 
@@ -118,5 +115,5 @@ const PORT = process.env.PORT || 3000;
 app.use('/', router)
 
 server.listen(PORT, () => {
-  console.log(`listening at http://localhost:${PORT}`)
+  // console.log(`listening at http://localhost:${PORT}`)
 })

@@ -1,18 +1,26 @@
 
-function newGame() {
-    window.location.href = "/game/" + (Math.floor(1000 + Math.random() * 9000));
+const newGame = () => {
+    window.location.href = "/game/" + genCode(4)
 }
 
-function joinGame() {
+const joinGame = () => {
     //needs to check if room exists
     let code = $("#codeInput").val()
-    if(code.length==4){
-        window.location.href = "/game/" + code
-    } 
+    if (code.length == 4 && /^[A-Z]+$/i.test(code)) {
+        window.location.href = "/game/" + code.toUpperCase()
+    }
 }
 
+const genCode = (length) => {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return result;
+}
 
 window.onload = () => {
-    $('#newGame').click(()=> newGame())
-    $('#joinGame').click(()=> joinGame())
+    $('#newGame').click(() => newGame())
+    $('#joinGame').click(() => joinGame())
 }
