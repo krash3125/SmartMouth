@@ -12,7 +12,6 @@ $(document).ready(function(){
             submitGuess($('#guessBox').val());  
         }
     } );
-
 })
 
 const joinGame = () => {
@@ -21,6 +20,8 @@ const joinGame = () => {
     
     $('#nameSet').hide()
     $('#preGame').show()
+
+    $('#gameUrl').html(window.location.href)
 }
 
 socket.on('startGameClients', () => {

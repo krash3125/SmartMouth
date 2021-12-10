@@ -19,7 +19,7 @@
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100 p-0">
         <div id="nameSet" class="text-center">
             <h5>i want to be called</h5>
-            <input id="name" class="mb-2 underlineInput" placeholder="enter name"><br />
+            <input id="name" class="mb-2 underlineInput" placeholder="enter name" autocomplete="off" ><br />
             <button id="joinGame" class="btn btn-danger">join game</button>
         </div>
         <div id="preGame" class="text-center">
@@ -29,7 +29,8 @@
             <h5>Players</h5>
             <div id="playerList">
             </div>
-            <button id="startGame" class="btn btn-danger">Start</button>
+            <button id="startGame" class="btn btn-danger mb-4">Start</button>
+            <h6 id="linkBox" class="urlDisplay p-2"><span class="bold noselect">Invite: </span><span id="gameUrl"></span></h6>
         </div>
         <div id='game'>
             <script type="text/javascript">
