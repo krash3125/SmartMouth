@@ -1,87 +1,62 @@
 const socket = io();
 
-socket.on('message', (data) => {
-    console.log(data)
+
+$(document).ready(function(){
+    
+    $('#joinGame').click(()=>joinGame())
+    $('#startGame').click(()=> socket.emit('startGame') )
+
+    $('#guessBox').keypress( function(event){
+        let keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            submitGuess($('#guessBox').val());  
+        }
+    } );
+
 })
 
-socket.on('connect', ()=>{
-    socket.emit('userJoined', sessionStorage.getItem("name"))
-})
-
-const showCode = (code) => {
-    document.getElementById("codeDisplay").innerHTML = code
+const joinGame = () => {
+    sessionStorage.setItem('name', $("#name").val())
+    socket.emit('userJoined', $("#name").val())
+    
+    $('#nameSet').hide()
+    $('#preGame').show()
 }
 
-socket.on('updatePlayerList', (playerList, code) => {
-    showCode(code)
-    let playerTable = document.getElementById('playerTable')
-    playerTable.innerHTML = ""
-    //console.log(playerList)
+socket.on('startGameClients', () => {
+    $('#preGame').hide()
+    $('#game').show()    
+})
+
+
+
+socket.on('updatePlayerList', (playerList) => {
+    $('#playerList').html("")
+    $('#playerGameDisplay').html("")
     playerList.forEach(player => {
-        if(player[1][2]==code){
-            let tr = document.createElement('tr')
-            tr.className = "playerTable"
-            let td1 = document.createElement('td')
-            let td2 = document.createElement('td')
-            // console.log(player[1][0])
-            // console.log(player[1][1])
-            td1.innerHTML = player[1][0]
-            td2.innerHTML = player[1][1]
-            tr.appendChild(td1)
-            tr.appendChild(td2)
-            playerTable.appendChild(tr)
-            //console.log(tr)
-        }
+        $('#playerList').append("<p>"+ player.name +"</p>")
+        $('#playerGameDisplay').append("<p>"+ player.name +" | " + player.points +"</p>")
     });
 })
 
 
 socket.on('letterChange', (data) => {
-    //console.log(data)
-    document.getElementById("firstLetter").innerHTML = data[0]
-    document.getElementById("secondLetter").innerHTML = data[1]
+    $("#firstLetter").html(data[0])
+    $("#secondLetter").html(data[1])
 })
 
-socket.on('updateStartBtn', ()=>{
-    document.getElementById('start').disabled = !document.getElementById('start').disabled
-})
+socket.on('clearInput', ()=>$('#guessBox').val(''))
 
-function genLetters() {
-    socket.emit('genLetters')
-}
-
-function startGame() {
-    socket.emit('startGame')
-    //document.getElementById('start').disabled = true
-}
 
 function submitGuess(word){
     //word = word//.replace(/^[A-Za-z]+$/, "") //get better regex thing
     word = word.toLowerCase()
     if(word.length>2){
-        if(word.charAt(0)==document.getElementById("firstLetter").innerHTML){
-            if(word.charAt(word.length-1)==document.getElementById("secondLetter").innerHTML){
+        if(word.charAt(0)==$("#firstLetter").html()){
+            if(word.charAt(word.length-1)==$("#secondLetter").html()){
                 socket.emit('submitGuess', word)
             }
         }
     }
-}
-
-
-window.onload = () => {
-    document.getElementById("generate").addEventListener('click', () => genLetters())
-    document.getElementById("leave").addEventListener('click', () => window.location.href = "/home")
-    document.getElementById("start").addEventListener('click', () => startGame())
-
-
-    let guessBox = document.getElementById('guessBox')
-
-    guessBox .addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-          event.preventDefault();
-        submitGuess(guessBox.value)
-        guessBox.value = ""
-        }
-    });
-
+    $('#guessBox').val('')
 }
