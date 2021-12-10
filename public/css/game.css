@@ -2,13 +2,31 @@
     --backPanelColor: #E0CFFC;
     --tileColor: #A3CFBB;
     --btnColor: rgb(129, 183, 212);
-  }
-  
-body {
-    background-color: var(--backPanelColor);
-    font-family: system-ui;
 }
 
+@font-face {
+    font-family: "mhf";
+    src: url('../fonts/michellehandwritting.ttf') format("opentype");;
+}
+
+body {
+    background-color: var(--backPanelColor);
+    font-family: "mhf";
+}
+
+.underlineInput {
+    border: 0;
+    background-color: var(--backPanelColor);
+    border-bottom: 2px solid grey;
+    text-align: center;
+}
+
+.underlineInput:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/*-------*/
 
 .letterDisplay{
     display: flex;
@@ -18,6 +36,14 @@ body {
 
     margin: 1rem;
     padding: 1rem;
+}
+
+.playerDisplay{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
 }
 
 .letter {
