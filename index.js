@@ -81,15 +81,15 @@ io.on('connection', (socket) => {
 
   socket.on('userJoined', (name) => {
     userInit(name)
+  })
 
-    socket.on('disconnect', () => {
-      serverRooms.set(serverCode, serverRooms.get(serverCode).filter(user => user.socketId != socket.id))
-      socketIdMap.delete(socket.id)
-      // console.log(serverRooms)
-      // console.log(socketIdMap)
-      //close room if 0 players in game
-      io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
-    })
+  socket.on('disconnect', () => {
+    serverRooms.set(serverCode, serverRooms.get(serverCode).filter(user => user.socketId != socket.id))
+    socketIdMap.delete(socket.id)
+    // console.log(serverRooms)
+    // console.log(socketIdMap)
+    //close room if 0 players in game
+    io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
   })
 
   socket.on('startGame', () => {
@@ -102,7 +102,9 @@ io.on('connection', (socket) => {
       socketIdMap.get(socket.id).addPoints(100)
       io.to(serverCode).emit('updatePlayerList', serverRooms.get(serverCode))
       io.to(serverCode).emit('clearInput')
+      io.to(serverCode).emit('lastWord', word)
       newLetters()
+
     }
   })
 

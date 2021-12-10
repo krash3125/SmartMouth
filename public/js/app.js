@@ -48,6 +48,9 @@ socket.on('letterChange', (data) => {
 
 socket.on('clearInput', ()=>$('#guessBox').val(''))
 
+socket.on('lastWord', (word)=>{
+    $('#lastWord').html(word)
+})
 
 function submitGuess(word){
     //word = word//.replace(/^[A-Za-z]+$/, "") //get better regex thing
