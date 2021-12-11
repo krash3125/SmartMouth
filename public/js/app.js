@@ -51,8 +51,6 @@ socket.on('updateVoteSkip', count => {
 })
 
 socket.on('playerCorrectGuess', (playerList, word) => {
-    console.log(word)
-    console.log("word")
     updatePlayerList(playerList)
     $('#guessBox').val('')
     $('#lastWord').html(word)
